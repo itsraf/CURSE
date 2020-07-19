@@ -308,11 +308,6 @@ class User:
         for i in query_result:
             print(i)
 
-
-class Student(User):
-    def __init__(self, fname, lname, idNum):
-        super().__init__(fname, lname, idNum)
-
     def searchCourses(self):
         print('You are searching for courses.')
         while True:
@@ -464,8 +459,9 @@ class Student(User):
             elif param == "q" or param=='Q':
                 break
 
-            #database.commit()
-            #break
+class Student(User):
+    def __init__(self, fname, lname, idNum):
+        super().__init__(fname, lname, idNum)
 
     def add_dropCourse(self):
         # Add or drop courses as a student, depending on crn_parameter
@@ -488,6 +484,7 @@ class Student(User):
                                    WHERE CRN='%s';""" % (user_input))
                         query_result1 = cursor.fetchone()
                         if query_result != query_result1:           #after searching in both tables, if they are different then schedule does not have the course
+
 
                             #check if there are other courses with the same time
                             course_time,course_days=query_result[4],query_result[5]
@@ -512,7 +509,7 @@ class Student(User):
                                 query_result[8] )]  #CREDITS
                                 sql_command = """INSERT INTO SCHEDULE(TITLE,CRN,DEPT,INSTRUCTOR, TIME,DAYS_OF_WEEK, SEMESTER, YEAR, CREDITS) VALUES(?,?,?,?,?,?,?,?,?)"""
                                 cursor.executemany(sql_command, result)
-                                print('Course added')
+                                print('Course added to schedule')
                                 database.commit()
                             else:
                                 print('You have a time conflict with:')
